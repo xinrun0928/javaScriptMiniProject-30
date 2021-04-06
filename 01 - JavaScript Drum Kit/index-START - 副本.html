@@ -62,18 +62,31 @@
   <script>
 
     // 1、按下按键的时候，播放对应的声音
-    window.addEventListener('keydown', function (event) {
-      const audio = document.querySelector(`audio[data-key="${event}"]`)
+    function playSound(event) {
+      const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`)
+      const key = document.querySelector(`div[data-key="${event.keyCode}"]`)
       if (!audio) return
       audio.currentTime = 0;
       audio.play()
       console.log(audio)
-    })
+      // 2、按下按键的时候，改变该按键的显示效果
+      key.classList.add('playing')
 
-    // 2、按下按键的时候，改变该按键的显示效果
-
+    }
+    
     // 3、案件效果转换之后，恢复到最初状态
-
+    function removePlaying(event) {
+      if (event.propertyName !== 'transform') return;
+      this.classList.remove('playing')
+    }
+    
+    
+    const keys = document.querySelectorAll(".key");
+    keys.forEach((key, index) => {
+      key.addEventListener('transitionend', removePlaying)
+    })
+    window.addEventListener('keydown',playSound)
+    
   </script>
 
 
